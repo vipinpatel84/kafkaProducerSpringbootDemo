@@ -1,7 +1,11 @@
 package com.demo.kafka.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,10 +20,17 @@ public class KafkaApplicationController {
 	@Value("${topicName}")
 	private String topicName;
 	
-	@GetMapping(path ="/{name}")
-	public String getHelloWorld(@PathVariable String name) {
-		System.out.println(name);
-		kafkaTemplate.send(topicName, "Hello "+name);
-		return "Hello " + name;
+	@GetMapping("/")
+	public String getHelloWorld() {
+		List<String> teamName = new ArrayList<>();
+		teamName.add("Darwin");
+		teamName.add("B2C");
+		teamName.add("Darwin Legacy");
+		
+		for (String name: teamName) {
+			kafkaTemplate.send(topicName, "Hello "+name);	
+		}
+		
+		return "Hello Kafka" ;
 	}
 }
